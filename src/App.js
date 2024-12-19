@@ -20,7 +20,7 @@ const novelsData = [
 const App = () => {
   const [currentView, setCurrentView] = useState('profile');
   const [selectedNovel, setSelectedNovel] = useState(null);
-  const [currentChapter, setCurrentChapter] = useState(null); // Добавляем состояние для текущей главы
+  const [currentChapter, setCurrentChapter] = useState(null);
   const [comments, setComments] = useState({});
 
   const handleSaveComment = (type, id, comment) => {
@@ -36,20 +36,25 @@ const App = () => {
     }));
   };
 
-  // Добавляем обработчик выбора главы
   const handleSelectChapter = (chapterNumber) => {
+    console.log('Selected chapter:', chapterNumber);
     setCurrentChapter(chapterNumber);
-    // Здесь можно добавить логику для загрузки содержимого главы
-    console.log(`Selected chapter ${chapterNumber}`);
   };
 
+  console.log('Current view:', currentView);
+  console.log('Selected novel:', selectedNovel);
+  console.log('Current chapter:', currentChapter);
+
   return (
-    <div>
+    <div className="min-h-screen bg-gray-50">
       {currentView === 'profile' && (
         <ProfilePage
           novels={novelsData}
           onSelectNovel={(id) => {
-            setSelectedNovel(novelsData.find((novel) => novel.id === id));
+            console.log('Selecting novel with id:', id);
+            const novel = novelsData.find((n) => n.id === id);
+            console.log('Found novel:', novel);
+            setSelectedNovel(novel);
             setCurrentView('novel');
           }}
         />
@@ -59,10 +64,10 @@ const App = () => {
           novel={selectedNovel}
           onBack={() => {
             setCurrentView('profile');
-            setCurrentChapter(null); // Сбрасываем текущую главу при возврате
+            setCurrentChapter(null);
           }}
-          onSelectChapter={handleSelectChapter} // Передаем обработчик
-          currentChapter={currentChapter} // Передаем текущую главу
+          onSelectChapter={handleSelectChapter}
+          currentChapter={currentChapter}
           comments={comments[selectedNovel.id] || []}
           onSaveComment={handleSaveComment}
         />
