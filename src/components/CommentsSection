@@ -1,14 +1,14 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 
-const CommentsSection = ({ type, id, comments, onSaveComment }) => {
+const CommentsSection = ({ type, id, comments = [], onSaveComment }) => {
   const [newComment, setNewComment] = useState('');
 
-  const handleSave = useCallback(() => {
+  const handleSave = () => {
     if (newComment.trim()) {
       onSaveComment(type, id, newComment);
       setNewComment('');
     }
-  }, [newComment, type, id, onSaveComment]);
+  };
 
   return (
     <div className="space-y-4">
@@ -21,12 +21,12 @@ const CommentsSection = ({ type, id, comments, onSaveComment }) => {
       />
       <button
         onClick={handleSave}
-        className="bg-blue-600 text-white px-4 py-2 rounded"
+        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
       >
         Отправить
       </button>
       <div className="space-y-2">
-        {comments.map((comment) => (
+        {Array.isArray(comments) && comments.map((comment) => (
           <div key={comment.id} className="p-3 bg-gray-50 rounded">
             <p className="text-sm">{comment.text}</p>
             <p className="text-xs text-gray-500 mt-1">
