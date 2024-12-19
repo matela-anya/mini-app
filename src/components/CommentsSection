@@ -1,9 +1,8 @@
-// Создаем общий компонент для управления комментариями
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 
-// Компонент для управления комментариями (главы и новеллы)
 const CommentsSection = ({ type, id, comments, onSaveComment }) => {
   const [newComment, setNewComment] = useState('');
+  console.log('CommentsSection rendering with comments:', comments);
 
   const handleSave = useCallback(() => {
     if (newComment.trim()) {
@@ -18,20 +17,21 @@ const CommentsSection = ({ type, id, comments, onSaveComment }) => {
         value={newComment}
         onChange={(e) => setNewComment(e.target.value)}
         placeholder={`Оставьте комментарий к ${type === 'chapter' ? 'главе' : 'новелле'}...`}
-        className="w-full p-2 border rounded"
+        className="w-full p-3 border rounded resize-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400 outline-none transition-all"
         rows="3"
       />
       <button
         onClick={handleSave}
-        className="bg-blue-600 text-white px-4 py-2 rounded"
+        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+        disabled={!newComment.trim()}
       >
         Отправить
       </button>
-      <div className="space-y-2">
+      <div className="space-y-3">
         {comments.map((comment) => (
-          <div key={comment.id} className="p-3 bg-gray-50 rounded">
-            <p className="text-sm">{comment.text}</p>
-            <p className="text-xs text-gray-500 mt-1">
+          <div key={comment.id} className="p-4 bg-gray-50 rounded">
+            <p className="text-sm text-gray-700">{comment.text}</p>
+            <p className="text-xs text-gray-500 mt-2">
               {new Date(comment.timestamp).toLocaleString()}
             </p>
           </div>
