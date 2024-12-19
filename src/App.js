@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import { ProfilePage } from './components/ProfilePage';
 import { NovelPage } from './components/NovelPage';
-import CommentsSection from './components/CommentsSection';
 
 const novelsData = [
   {
@@ -18,8 +16,8 @@ const novelsData = [
   },
 ];
 
-const AppContent = () => {
-  const navigate = useNavigate();
+const App = () => {
+  const [currentView, setCurrentView] = useState('profile');
   const [selectedNovel, setSelectedNovel] = useState(null);
   const [comments, setComments] = useState({});
 
@@ -36,43 +34,35 @@ const AppContent = () => {
     }));
   };
 
-  return (
-    <Routes>
-      <Route 
-        path="/" 
-        element={
-          <ProfilePage
-            novels={novelsData}
-            onSelectNovel={(id) => {
-              const novel = novelsData.find((n) => n.id === id);
-              setSelectedNovel(novel);
-              navigate(`/novel/${id}`);
-            }}
-          />
-        }
-      />
-      <Route 
-        path="/novel/:id" 
-        element={
-          <NovelPage
-            novel={selectedNovel}
-            onBack={() => navigate('/')}
-            comments={selectedNovel ? comments[selectedNovel.id] || [] : []}
-            onSaveComment={handleSaveComment}
-          />
-        }
-      />
-    </Routes>
-  );
-};
+  console.log('Current view:', currentView);
+  console.log('Selected novel:', selectedNovel);
 
-const App = () => {
   return (
-    <Router>
-      <div className="min-h-screen bg-gray-50">
-        <AppContent />
-      </div>
-    </Router>
+    <div className="min-h-screen bg-gray-50">
+      {currentView === 'profile' && (
+        <ProfilePage
+          novels={novelsData}
+          onSelectNovel={(id) => {
+            console.log('Selecting novel with id:', id);
+            const novel = novelsData.find((n) => n.id === id);
+            console.log('Found novel:', novel);
+            setSelectedNovel(novel);
+            setCurrentView('novel');
+          }}
+        />
+      )}
+      {currentView === 'novel' && selectedNovel && (
+        <NovelPage
+          novel={selectedNovel}
+          onBack={() => {
+            setCurrentView('profile');
+            setSelectedNovel(null);
+          }}
+          comments={comments[selectedNovel.id] || []}
+          onSaveComment={handleSaveComment}
+        />
+      )}
+    </div>
   );
 };
 
