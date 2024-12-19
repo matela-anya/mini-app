@@ -3,7 +3,6 @@ import { ProfilePage } from './components/ProfilePage';
 import { NovelPage } from './components/NovelPage';
 import CommentsSection from './components/CommentsSection';
 
-// Пример данных для новелл
 const novelsData = [
   {
     id: 1,
@@ -21,6 +20,7 @@ const novelsData = [
 const App = () => {
   const [currentView, setCurrentView] = useState('profile');
   const [selectedNovel, setSelectedNovel] = useState(null);
+  const [currentChapter, setCurrentChapter] = useState(null); // Добавляем состояние для текущей главы
   const [comments, setComments] = useState({});
 
   const handleSaveComment = (type, id, comment) => {
@@ -34,6 +34,13 @@ const App = () => {
       ...prev,
       [id]: [...(prev[id] || []), newComment],
     }));
+  };
+
+  // Добавляем обработчик выбора главы
+  const handleSelectChapter = (chapterNumber) => {
+    setCurrentChapter(chapterNumber);
+    // Здесь можно добавить логику для загрузки содержимого главы
+    console.log(`Selected chapter ${chapterNumber}`);
   };
 
   return (
@@ -50,7 +57,12 @@ const App = () => {
       {currentView === 'novel' && selectedNovel && (
         <NovelPage
           novel={selectedNovel}
-          onBack={() => setCurrentView('profile')}
+          onBack={() => {
+            setCurrentView('profile');
+            setCurrentChapter(null); // Сбрасываем текущую главу при возврате
+          }}
+          onSelectChapter={handleSelectChapter} // Передаем обработчик
+          currentChapter={currentChapter} // Передаем текущую главу
           comments={comments[selectedNovel.id] || []}
           onSaveComment={handleSaveComment}
         />
