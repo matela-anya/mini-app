@@ -1,12 +1,8 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
 import CommentsSection from './CommentsSection';
 
 const NovelPage = ({ novel, onBack, comments, onSaveComment }) => {
-  const { id } = useParams();
-  
-  // Добавляем дебаг информацию
-  console.log('NovelPage rendered with:', { novel, id, comments });
+  console.log('NovelPage rendering with:', { novel, comments });
 
   if (!novel) {
     return (
@@ -27,7 +23,15 @@ const NovelPage = ({ novel, onBack, comments, onSaveComment }) => {
         ← Назад
       </button>
       <div className="flex space-x-4 mb-4">
-        <img src={novel.cover} alt={novel.title} className="w-32 rounded-lg shadow" />
+        <img 
+          src={novel.cover} 
+          alt={novel.title} 
+          className="w-32 rounded-lg shadow"
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = 'https://via.placeholder.com/128x192';
+          }}
+        />
         <div className="flex-1">
           <h2 className="text-xl font-bold">{novel.title}</h2>
           <p className="text-gray-600">{novel.author}</p>
