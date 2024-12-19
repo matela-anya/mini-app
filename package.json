@@ -14,6 +14,9 @@
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.31"
   },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+  },
   "scripts": {
     "dev": "react-scripts start",
     "build": "react-scripts build",
@@ -37,8 +40,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
-  "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
   }
 }
