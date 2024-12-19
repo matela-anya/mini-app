@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import CommentsSection from './CommentsSection';
+// Временно закомментируем импорт комментариев для отладки
+// import CommentsSection from './CommentsSection';
 
 const NovelPage = ({ novel, onBack, comments, onSaveComment }) => {
   const [selectedChapter, setSelectedChapter] = useState(null);
@@ -71,6 +72,7 @@ const NovelPage = ({ novel, onBack, comments, onSaveComment }) => {
         </div>
       )}
 
+      {/* Временно закомментируем секцию комментариев
       <div className="mt-8">
         <h3 className="font-semibold text-lg mb-4">Комментарии к новелле</h3>
         <CommentsSection
@@ -80,6 +82,7 @@ const NovelPage = ({ novel, onBack, comments, onSaveComment }) => {
           onSaveComment={onSaveComment}
         />
       </div>
+      */}
     </div>
   );
 };
