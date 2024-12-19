@@ -1,8 +1,12 @@
 import React from 'react';
-import CommentsSection from './CommentsSection';  // Добавляем этот импорт
+import CommentsSection from './CommentsSection';
 
-// Обновление страницы новеллы
-const NovelPage = ({ novel, onBack, onSelectChapter, comments, onSaveComment }) => {
+const NovelPage = ({ novel, onBack, onSelectChapter, currentChapter, comments, onSaveComment }) => {
+  // Добавим проверку пропсов
+  if (!novel) {
+    return null;
+  }
+
   return (
     <div className="p-4 max-w-lg mx-auto">
       <button onClick={onBack} className="text-blue-600 mb-4">
@@ -24,8 +28,10 @@ const NovelPage = ({ novel, onBack, onSelectChapter, comments, onSaveComment }) 
         {Array.from({ length: novel.chapters }, (_, i) => (
           <button
             key={i}
-            onClick={() => onSelectChapter(i + 1)}
-            className="block w-full text-left p-2 rounded hover:bg-gray-100"
+            onClick={() => onSelectChapter && onSelectChapter(i + 1)}
+            className={`block w-full text-left p-2 rounded hover:bg-gray-100 ${
+              currentChapter === i + 1 ? 'bg-blue-50' : ''
+            }`}
           >
             Глава {i + 1}
           </button>
