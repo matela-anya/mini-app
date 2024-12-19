@@ -1,6 +1,5 @@
 import React from 'react';
-// Изменим путь импорта на относительный
-import CommentsSection from './CommentsSection.js';  // Обратите внимание на .js в конце
+// import CommentsSection from './CommentsSection';
 
 const NovelPage = ({ novel, onBack, comments, onSaveComment }) => {
   console.log('NovelPage rendering with:', { novel, comments });
@@ -49,8 +48,8 @@ const NovelPage = ({ novel, onBack, comments, onSaveComment }) => {
           </button>
         ))}
       </div>
-      {/* Временно закомментируем компонент комментариев для проверки */}
-      {/* <CommentsSection
+      {/* Временно отключаем секцию комментариев
+      <CommentsSection
         type="novel"
         id={novel.id}
         comments={comments}
