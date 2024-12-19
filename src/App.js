@@ -36,42 +36,24 @@ const App = () => {
     }));
   };
 
-  const handleSelectChapter = (chapterNumber) => {
-    console.log('Selected chapter:', chapterNumber);
-    setCurrentChapter(chapterNumber);
-  };
-
-  console.log('Current view:', currentView);
-  console.log('Selected novel:', selectedNovel);
-  console.log('Current chapter:', currentChapter);
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      {currentView === 'profile' && (
+    <div>
+      {currentView === 'profile' ? (
         <ProfilePage
           novels={novelsData}
           onSelectNovel={(id) => {
-            console.log('Selecting novel with id:', id);
-            const novel = novelsData.find((n) => n.id === id);
-            console.log('Found novel:', novel);
-            setSelectedNovel(novel);
+            setSelectedNovel(novelsData.find((novel) => novel.id === id));
             setCurrentView('novel');
           }}
         />
-      )}
-      {currentView === 'novel' && selectedNovel && (
+      ) : currentView === 'novel' && selectedNovel ? (
         <NovelPage
           novel={selectedNovel}
-          onBack={() => {
-            setCurrentView('profile');
-            setCurrentChapter(null);
-          }}
-          onSelectChapter={handleSelectChapter}
-          currentChapter={currentChapter}
+          onBack={() => setCurrentView('profile')}
           comments={comments[selectedNovel.id] || []}
           onSaveComment={handleSaveComment}
         />
-      )}
+      ) : null}
     </div>
   );
 };
