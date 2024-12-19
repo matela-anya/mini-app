@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ProfilePage } from './components/ProfilePage';
 import { NovelPage } from './components/NovelPage';
 
@@ -21,47 +21,62 @@ const App = () => {
   const [selectedNovel, setSelectedNovel] = useState(null);
   const [comments, setComments] = useState({});
 
-  const handleSaveComment = (type, id, comment) => {
-    const newComment = {
-      id: Date.now(),
-      text: comment,
-      timestamp: new Date().toISOString(),
-    };
+  // Добавляем эффект для отслеживания изменений
+  useEffect(() => {
+    console.log('Current view changed to:', currentView);
+    console.log('Selected novel:', selectedNovel);
+  }, [currentView, selectedNovel]);
 
-    setComments((prev) => ({
-      ...prev,
-      [id]: [...(prev[id] || []), newComment],
-    }));
+  const handleSelectNovel = (id) => {
+    console.log('Selecting novel with id:', id);
+    const novel = novelsData.find(n => n.id === id);
+    console.log('Found novel:', novel);
+    setSelectedNovel(novel);
+    setCurrentView('novel');
   };
 
-  console.log('Current view:', currentView);
-  console.log('Selected novel:', selectedNovel);
+  const handleBack = () => {
+    console.log('Going back to profile');
+    setCurrentView('profile');
+    setSelectedNovel(null);
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {currentView === 'profile' && (
-        <ProfilePage
-          novels={novelsData}
-          onSelectNovel={(id) => {
-            console.log('Selecting novel with id:', id);
-            const novel = novelsData.find((n) => n.id === id);
-            console.log('Found novel:', novel);
-            setSelectedNovel(novel);
-            setCurrentView('novel');
-          }}
-        />
-      )}
-      {currentView === 'novel' && selectedNovel && (
-        <NovelPage
-          novel={selectedNovel}
-          onBack={() => {
-            setCurrentView('profile');
-            setSelectedNovel(null);
-          }}
-          comments={comments[selectedNovel.id] || []}
-          onSaveComment={handleSaveComment}
-        />
-      )}
+    <div className="min-h-screen">
+      <div className="p-4 max-w-4xl mx-auto">
+        {currentView === 'profile' ? (
+          <>
+            <ProfilePage 
+              novels={novelsData} 
+              onSelectNovel={handleSelectNovel} 
+            />
+            <div className="hidden">Debug: Profile View</div>
+          </>
+        ) : currentView === 'novel' && selectedNovel ? (
+          <>
+            <NovelPage
+              novel={selectedNovel}
+              onBack={handleBack}
+              comments={comments[selectedNovel.id] || []}
+              onSaveComment={(type, id, comment) => {
+                console.log('Saving comment:', { type, id, comment });
+                const newComment = {
+                  id: Date.now(),
+                  text: comment,
+                  timestamp: new Date().toISOString(),
+                };
+                setComments(prev => ({
+                  ...prev,
+                  [id]: [...(prev[id] || []), newComment],
+                }));
+              }}
+            />
+            <div className="hidden">Debug: Novel View</div>
+          </>
+        ) : (
+          <div>Loading...</div>
+        )}
+      </div>
     </div>
   );
 };
