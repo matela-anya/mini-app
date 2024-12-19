@@ -1,3 +1,6 @@
+import React from 'react';
+import CommentsSection from './CommentsSection';  // Добавляем этот импорт
+
 // Обновление страницы новеллы
 const NovelPage = ({ novel, onBack, onSelectChapter, comments, onSaveComment }) => {
   return (
