@@ -12,8 +12,7 @@
     "@twa-dev/sdk": "^6.9.1",
     "tailwindcss": "^3.3.0",
     "autoprefixer": "^10.4.16",
-    "postcss": "^8.4.31",
-    "react-router-dom": "^6.22.3"  // Добавляем для маршрутизации
+    "postcss": "^8.4.31"
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
