@@ -1,9 +1,9 @@
-import React from 'react';
-// import CommentsSection from './CommentsSection';
+import React, { useState } from 'react';
+import CommentsSection from './CommentsSection';
 
 const NovelPage = ({ novel, onBack, comments, onSaveComment }) => {
-  console.log('NovelPage rendering with:', { novel, comments });
-
+  const [selectedChapter, setSelectedChapter] = useState(null);
+  
   if (!novel) {
     return (
       <div className="p-4 max-w-lg mx-auto">
@@ -16,6 +16,11 @@ const NovelPage = ({ novel, onBack, comments, onSaveComment }) => {
       </div>
     );
   }
+
+  const handleChapterClick = (chapterNumber) => {
+    console.log(`Выбрана глава ${chapterNumber}`);
+    setSelectedChapter(chapterNumber);
+  };
 
   return (
     <div className="p-4 max-w-lg mx-auto bg-white shadow rounded-lg">
@@ -37,24 +42,44 @@ const NovelPage = ({ novel, onBack, comments, onSaveComment }) => {
           </div>
         </div>
       </div>
+
       <p className="mb-4 text-gray-700">{novel.description}</p>
+
       <div className="space-y-2 mb-6">
+        <h3 className="font-semibold text-lg mb-3">Список глав</h3>
         {Array.from({ length: novel.chapters }, (_, i) => (
           <button
             key={i}
-            className="block w-full text-left p-2 rounded hover:bg-gray-100"
+            onClick={() => handleChapterClick(i + 1)}
+            className={`block w-full text-left p-3 rounded transition-colors
+              ${selectedChapter === i + 1 
+                ? 'bg-blue-50 text-blue-700 font-medium' 
+                : 'hover:bg-gray-50'
+              }`}
           >
             Глава {i + 1}
           </button>
         ))}
       </div>
-      {/* Временно отключаем секцию комментариев
-      <CommentsSection
-        type="novel"
-        id={novel.id}
-        comments={comments}
-        onSaveComment={onSaveComment}
-      /> */}
+
+      {selectedChapter && (
+        <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+          <h4 className="font-medium mb-2">Глава {selectedChapter}</h4>
+          <p className="text-gray-600">
+            Содержимое главы {selectedChapter} будет добавлено позже.
+          </p>
+        </div>
+      )}
+
+      <div className="mt-8">
+        <h3 className="font-semibold text-lg mb-4">Комментарии к новелле</h3>
+        <CommentsSection
+          type="novel"
+          id={novel.id}
+          comments={comments}
+          onSaveComment={onSaveComment}
+        />
+      </div>
     </div>
   );
 };
