@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import { ProfilePage } from './components/ProfilePage';
 import { NovelPage } from './components/NovelPage';
 import CommentsSection from './components/CommentsSection';
@@ -17,10 +18,9 @@ const novelsData = [
   },
 ];
 
-const App = () => {
-  const [currentView, setCurrentView] = useState('profile');
+const AppContent = () => {
+  const navigate = useNavigate();
   const [selectedNovel, setSelectedNovel] = useState(null);
-  const [currentChapter, setCurrentChapter] = useState(null);
   const [comments, setComments] = useState({});
 
   const handleSaveComment = (type, id, comment) => {
@@ -37,24 +37,42 @@ const App = () => {
   };
 
   return (
-    <div>
-      {currentView === 'profile' ? (
-        <ProfilePage
-          novels={novelsData}
-          onSelectNovel={(id) => {
-            setSelectedNovel(novelsData.find((novel) => novel.id === id));
-            setCurrentView('novel');
-          }}
-        />
-      ) : currentView === 'novel' && selectedNovel ? (
-        <NovelPage
-          novel={selectedNovel}
-          onBack={() => setCurrentView('profile')}
-          comments={comments[selectedNovel.id] || []}
-          onSaveComment={handleSaveComment}
-        />
-      ) : null}
-    </div>
+    <Routes>
+      <Route 
+        path="/" 
+        element={
+          <ProfilePage
+            novels={novelsData}
+            onSelectNovel={(id) => {
+              const novel = novelsData.find((n) => n.id === id);
+              setSelectedNovel(novel);
+              navigate(`/novel/${id}`);
+            }}
+          />
+        }
+      />
+      <Route 
+        path="/novel/:id" 
+        element={
+          <NovelPage
+            novel={selectedNovel}
+            onBack={() => navigate('/')}
+            comments={selectedNovel ? comments[selectedNovel.id] || [] : []}
+            onSaveComment={handleSaveComment}
+          />
+        }
+      />
+    </Routes>
+  );
+};
+
+const App = () => {
+  return (
+    <Router>
+      <div className="min-h-screen bg-gray-50">
+        <AppContent />
+      </div>
+    </Router>
   );
 };
 
