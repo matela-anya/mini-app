@@ -1,5 +1,6 @@
 import React from 'react';
-import CommentsSection from './CommentsSection';
+// Изменим путь импорта на относительный
+import CommentsSection from './CommentsSection.js';  // Обратите внимание на .js в конце
 
 const NovelPage = ({ novel, onBack, comments, onSaveComment }) => {
   console.log('NovelPage rendering with:', { novel, comments });
@@ -27,10 +28,6 @@ const NovelPage = ({ novel, onBack, comments, onSaveComment }) => {
           src={novel.cover} 
           alt={novel.title} 
           className="w-32 rounded-lg shadow"
-          onError={(e) => {
-            e.target.onerror = null;
-            e.target.src = 'https://via.placeholder.com/128x192';
-          }}
         />
         <div className="flex-1">
           <h2 className="text-xl font-bold">{novel.title}</h2>
@@ -46,18 +43,19 @@ const NovelPage = ({ novel, onBack, comments, onSaveComment }) => {
         {Array.from({ length: novel.chapters }, (_, i) => (
           <button
             key={i}
-            className="block w-full text-left p-2 rounded hover:bg-gray-100 transition-colors"
+            className="block w-full text-left p-2 rounded hover:bg-gray-100"
           >
             Глава {i + 1}
           </button>
         ))}
       </div>
-      <CommentsSection
+      {/* Временно закомментируем компонент комментариев для проверки */}
+      {/* <CommentsSection
         type="novel"
         id={novel.id}
         comments={comments}
         onSaveComment={onSaveComment}
-      />
+      /> */}
     </div>
   );
 };
